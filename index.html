@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LKPD Interaktif IPA - Pemuaian Zat</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js library for PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: {
+                            50: '#FFFCF8',
+                            100: '#FAF4EB',
+                            200: '#F4E8D7',
+                            300: '#E8D4B8',
+                            400: '#D9BC96',
+                        },
+                        brown: {
+                            500: '#B08259',
+                            600: '#8C5E35',
+                            700: '#6B4423',
+                            800: '#4A2E14',
+                            900: '#2E1A0A',
+                        },
+                        warmAccent: '#D97724',
+                        coolGreen: '#3B7A57'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FAF4EB;
+            color: #2E1A0A;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .bg-soft-cream {
+            background-color: #F4E8D7;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(217, 188, 150, 0.6);
+        }
+        input[type="text"], textarea, select {
+            background-color: #FFFFFF;
+            border: 1px solid #D9BC96;
+            color: #2E1A0A;
+        }
+        input[type="text"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #8C5E35;
+            box-shadow: 0 0 0 3px rgba(140, 94, 53, 0.15);
+        }
+        /* Custom print formatting override */
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; }
+            .glass-card { border: 1px solid #ccc !important; box-shadow: none !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-brown-500 selection:text-white">
+
+    <!-- TOP ACTION BAR / NAVBAR (NO-PRINT) -->
+    <header class="no-print bg-cream-200/95 sticky top-0 z-50 border-b border-cream-300 shadow-sm backdrop-blur-md">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-brown-600 flex items-center justify-center text-white font-bold text-xl shadow">
+                    <i class="fa-solid fa-file-pen"></i>
+                </div>
+                <div>
+                    <h1 class="font-heading font-bold text-lg text-brown-900 leading-tight">LKPD INTERAKTIF IPA</h1>
+                    <p class="text-xs text-brown-700 font-medium">Materi Pemuaian Zat - Kelas VII MTs/SMP</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button onclick="downloadPDF()" class="px-5 py-2.5 bg-brown-600 hover:bg-brown-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-file-pdf text-base"></i> Download / Unduh PDF
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENT WRAPPER FOR PDF EXPORT -->
+    <main id="lkpd-content" class="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex-grow w-full space-y-6 bg-cream-100">
+
+        <!-- HEADER LKPD & IDENTITAS -->
+        <div class="bg-gradient-to-r from-cream-200 via-cream-100 to-cream-200 rounded-2xl p-6 border-2 border-cream-300 shadow-sm relative overflow-hidden">
+            <!-- Decorative Accent -->
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-brown-500/10 rounded-full blur-2xl"></div>
+
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-brown-500/20 pb-4 mb-5 gap-4">
+                <div>
+                    <span class="inline-block px-3 py-1 bg-brown-600 text-white text-xs font-semibold rounded-full mb-2">LEMBAR KERJA PESERTA DIDIK (LKPD)</span>
+                    <h2 class="font-heading font-bold text-2xl sm:text-3xl text-brown-900">PEMUAIAN ZAT DALAM KEHIDUPAN</h2>
+                    <p class="text-xs sm:text-sm text-brown-700">Mata Pelajaran IPA - Fase D / Kelas VII</p>
+                </div>
+                <div class="text-left md:text-right bg-white/80 p-3 rounded-xl border border-cream-300 text-xs text-brown-800 shadow-sm">
+                    <p class="font-bold text-brown-900">Penyusun:</p>
+                    <p class="font-semibold text-brown-700">Khuzaimatul Fitriyah, S.Si., M.Si.</p>
+                    <p class="text-[11px] text-brown-600">Guru IPA MTsN 1 Kota Malang</p>
+                </div>
+            </div>
+
+            <!-- FORM IDENTITAS KELOMPOK -->
+            <div class="bg-white/90 p-4 sm:p-5 rounded-xl border border-cream-300 shadow-inner space-y-4">
+                <h3 class="font-heading font-bold text-brown-900 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-users text-brown-600"></i> Identitas Kelompok Peserta Didik
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div>
+                        <label class="block font-semibold text-brown-800 mb-1">Nama Kelompok:</label>
+                        <input type="text" id="input-kelompok" placeholder="Contoh: Kelompok 1 (Newton)" class="w-full px-3 py-2 rounded-lg text-xs font-medium">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-brown-800 mb-1">Kelas / Semester:</label>
+                        <input type="text" id="input-kelas" placeholder="VII-A / Genap" class="w-full px-3 py-2 rounded-lg text-xs font-medium">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-brown-800 mb-1">Tanggal Kegiatan:</label>
+                        <input type="text" id="input-tanggal" placeholder="DD/MM/YYYY" class="w-full px-3 py-2 rounded-lg text-xs font-medium">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-brown-800 mb-1 text-xs">Anggota Kelompok:</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                        <input type="text" id="anggota-1" placeholder="1. Nama Siswa 1" class="w-full px-3 py-1.5 rounded-lg">
+                        <input type="text" id="anggota-2" placeholder="2. Nama Siswa 2" class="w-full px-3 py-1.5 rounded-lg">
+                        <input type="text" id="anggota-3" placeholder="3. Nama Siswa 3" class="w-full px-3 py-1.5 rounded-lg">
+                        <input type="text" id="anggota-4" placeholder="4. Nama Siswa 4" class="w-full px-3 py-1.5 rounded-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TUJUAN & PETUNJUK -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-card rounded-2xl p-5 shadow-sm">
+                <h3 class="font-heading font-bold text-brown-900 text-sm mb-3 flex items-center gap-2 border-b border-cream-300 pb-2">
+                    <i class="fa-solid fa-bullseye text-warmAccent"></i> Tujuan Pembelajaran
+                </h3>
+                <ul class="text-xs text-brown-800 space-y-2 list-disc list-inside">
+                    <li>Peserta didik dapat menganalisis konsep pemuaian panjang, luas, dan volume pada zat.</li>
+                    <li>Peserta didik dapat menghitung besarnya pemuaian panjang batang logam menggunakan rumus matematika sederhana.</li>
+                    <li>Peserta didik dapat mengidentifikasi contoh fenomena pemuaian dan penerapannya dalam kehidupan sehari-hari.</li>
+                </ul>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 shadow-sm">
+                <h3 class="font-heading font-bold text-brown-900 text-sm mb-3 flex items-center gap-2 border-b border-cream-300 pb-2">
+                    <i class="fa-solid fa-list-check text-brown-600"></i> Petunjuk Pengerjaan LKPD
+                </h3>
+                <ol class="text-xs text-brown-800 space-y-1.5 list-decimal list-inside">
+                    <li>Isilah identitas kelompok pada kolom yang telah disediakan.</li>
+                    <li>Baca dan diskusikan setiap stimulasi fenomena bersama teman sekelompokmu.</li>
+                    <li>Lakukan simulasi mini atau jawablah pertanyaan diskusi pada kolom jawaban.</li>
+                    <li>Setiap anggota berperan aktif dalam diskusi kelompok.</li>
+                    <li>Setelah selesai diisi, klik tombol <strong>"Download PDF"</strong> untuk mengunduh berkas jawaban.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- KEGIATAN 1: STIMULASI FENOMENA & ANALISIS LITERASI -->
+        <div class="glass-card rounded-2xl p-6 shadow-sm space-y-4">
+            <div class="flex items-center gap-2 border-b border-cream-300 pb-2">
+                <span class="w-7 h-7 rounded-lg bg-brown-600 text-white flex items-center justify-center font-bold text-xs">1</span>
+                <h3 class="font-heading font-bold text-brown-900 text-base">Kegiatan 1: Pengamatan Fenomena Pemuaian</h3>
+            </div>
+
+            <!-- Kartu Kasus Fenomena -->
+            <div class="bg-cream-200/80 p-4 rounded-xl border border-cream-300 space-y-2 text-xs">
+                <span class="font-bold text-brown-900 flex items-center gap-1">
+                    <i class="fa-solid fa-lightbulb text-warmAccent"></i> Wacana Pengamatan:
+                </span>
+                <p class="text-brown-800 leading-relaxed">
+                    Pada suatu siang yang terik, Andi mengamati kabel listrik yang terpasang di pinggir jalan raya tampak kendur dan melengkung ke bawah. Namun, ketika Andi melihat kabel tersebut pada pagi hari yang dingin, kabel tersebut tampak kencang dan lurus.
+                </p>
+            </div>
+
+            <!-- Pertanyaan Diskusi 1 -->
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-brown-900 mb-1">
+                        Pertanyaan 1.1: Mengapa kabel listrik dipasang kendor pada siang hari? Apa yang akan terjadi jika kabel dipasang sangat kencang pada siang hari?
+                    </label>
+                    <textarea id="jawab-1-1" rows="3" placeholder="Ketikkan hasil diskusi kelompokmu di sini..." class="w-full p-3 rounded-xl text-xs leading-relaxed"></textarea>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-brown-900 mb-1">
+                        Pertanyaan 1.2: Sebutkan 2 contoh peristiwa pemuaian zat lainnya yang sering kamu temui di sekitar rumah atau sekolah!
+                    </label>
+                    <textarea id="jawab-1-2" rows="3" placeholder="Ketikkan contoh peristiwa lainnya di sini..." class="w-full p-3 rounded-xl text-xs leading-relaxed"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- KEGIATAN 2: SIMULASI DATA & PERHITUNGAN RUMUS PEMUAIAN -->
+        <div class="glass-card rounded-2xl p-6 shadow-sm space-y-4">
+            <div class="flex items-center gap-2 border-b border-cream-300 pb-2">
+                <span class="w-7 h-7 rounded-lg bg-brown-600 text-white flex items-center justify-center font-bold text-xs">2</span>
+                <h3 class="font-heading font-bold text-brown-900 text-base">Kegiatan 2: Olah Data Perhitungan Pemuaian Panjang</h3>
+            </div>
+
+            <!-- Ringkasan Rumus -->
+            <div class="bg-white p-4 rounded-xl border border-cream-300 space-y-2 text-xs">
+                <p class="font-bold text-brown-900">Rumus Pemuaian Panjang Batang Logam:</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-center font-mono font-bold text-brown-800 bg-cream-100 p-2 rounded-lg">
+                    <div>ΔL = L0 × α × ΔT</div>
+                    <div>Lt = L0 + ΔL</div>
+                </div>
+                <p class="text-[11px] text-brown-700">Keterangan: ΔL = Pertambahan Panjang | L0 = Panjang Awal | α = Koefisien Muai Panjang (/°C) | ΔT = Perubahan Suhu (T_akhir - T_awal)</p>
+            </div>
+
+            <!-- Soal Perhitungan kelompok -->
+            <div class="space-y-4 text-xs">
+                <div class="bg-cream-50 p-4 rounded-xl border border-cream-300 space-y-3">
+                    <p class="font-bold text-brown-900 leading-relaxed">
+                        Studi Kasus Matematika: <br>
+                        Sebatang tembaga memiliki panjang awal (L0) sebesar 200 cm pada suhu 25 °C. Tembaga tersebut dipanaskan hingga suhunya menjadi 75 °C. Diketahui koefisien muai panjang tembaga (α) adalah 0.000017 /°C.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-white p-3 rounded-lg border border-cream-300">
+                        <div>
+                            <span class="block text-brown-700">Perubahan Suhu (ΔT):</span>
+                            <span class="font-bold text-brown-900">75 °C - 25 °C = 50 °C</span>
+                        </div>
+                        <div>
+                            <span class="block text-brown-700">Panjang Awal (L0):</span>
+                            <span class="font-bold text-brown-900">200 cm</span>
+                        </div>
+                        <div>
+                            <span class="block text-brown-700">Koefisien (α):</span>
+                            <span class="font-bold text-brown-900">0.000017 /°C</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-brown-900 mb-1">
+                            Tuliskan langkah perhitungan lengkap kelompokmu untuk mencari Pertambahan Panjang (ΔL) dan Panjang Akhir (Lt)!
+                        </label>
+                        <textarea id="jawab-2-hitung" rows="4" placeholder="Langkah Hitung:
+ΔL = L0 × α × ΔT
+ΔL = ...
+Lt = L0 + ΔL = ..." class="w-full p-3 rounded-xl font-mono text-xs leading-relaxed"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KEGIATAN 3: ISIAN SINGKAT & SOAL PILIHAN ANALISIS (LOTS, MOTS, HOTS) -->
+        <div class="glass-card rounded-2xl p-6 shadow-sm space-y-4">
+            <div class="flex items-center gap-2 border-b border-cream-300 pb-2">
+                <span class="w-7 h-7 rounded-lg bg-brown-600 text-white flex items-center justify-center font-bold text-xs">3</span>
+                <h3 class="font-heading font-bold text-brown-900 text-base">Kegiatan 3: Uji Pemahaman Kelompok</h3>
+            </div>
+
+            <div class="space-y-4 text-xs">
+                <!-- Question A -->
+                <div class="bg-white p-4 rounded-xl border border-cream-300 space-y-2">
+                    <p class="font-bold text-brown-900">A. [HOTS] Pemasangan Saklar Bimetal</p>
+                    <p class="text-brown-800">
+                        Dua buah logam A dan B direkatkan menjadi bimetal. Koefisien muai logam A lebih besar dari logam B (αA > αB). Jika bimetal tersebut dipanaskan, ke arah manakah bimetal akan melengkung? Jelaskan alasannya!
+                    </p>
+                    <textarea id="jawab-3-a" rows="3" placeholder="Jawaban dan alasan kelompok..." class="w-full p-3 rounded-xl text-xs leading-relaxed"></textarea>
+                </div>
+
+                <!-- Question B -->
+                <div class="bg-white p-4 rounded-xl border border-cream-300 space-y-2">
+                    <p class="font-bold text-brown-900">B. [MOTS] Celah Keramik Lantai</p>
+                    <p class="text-brown-800">
+                        Mengapa keramik lantai rumah seringkali diberi semen/pengisi khusus berjarak antar kepingannya? Apa konsekuensinya jika keramik dipasang terlalu rapat tanpa celah di musim panas?
+                    </p>
+                    <textarea id="jawab-3-b" rows="3" placeholder="Jawaban dan alasan kelompok..." class="w-full p-3 rounded-xl text-xs leading-relaxed"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- KESIMPULAN DISKUSI -->
+        <div class="glass-card rounded-2xl p-6 shadow-sm space-y-3">
+            <h3 class="font-heading font-bold text-brown-900 text-base flex items-center gap-2 border-b border-cream-300 pb-2">
+                <i class="fa-solid fa-graduation-cap text-brown-600"></i> Kesimpulan Pembelajaran
+            </h3>
+            <p class="text-xs text-brown-800">
+                Berdasarkan seluruh kegiatan pengamatan dan perhitungan di atas, tuliskan kesimpulan utama kelompokmu mengenai konsep pemuaian zat!
+            </p>
+            <textarea id="jawab-kesimpulan" rows="4" placeholder="Tuliskan kesimpulan umum di sini..." class="w-full p-3 rounded-xl text-xs leading-relaxed"></textarea>
+        </div>
+
+        <!-- FOOTER LKPD -->
+        <div class="text-center pt-4 border-t border-cream-300 text-xs text-brown-700 space-y-1">
+            <p class="font-bold text-brown-900">LKPD IPA Kelas VII MTs/SMP - Pemuaian Zat</p>
+            <p>Disusun oleh: <strong>Khuzaimatul Fitriyah, S.Si., M.Si.</strong> (MTsN 1 Kota Malang)</p>
+        </div>
+
+    </main>
+
+    <!-- FLOATING ACTION BUTTON FOR MOBILE (NO-PRINT) -->
+    <div class="no-print fixed bottom-5 right-5 z-40 sm:hidden">
+        <button onclick="downloadPDF()" class="w-14 h-14 bg-brown-600 text-white rounded-full shadow-2xl flex items-center justify-center text-xl font-bold">
+            <i class="fa-solid fa-file-pdf"></i>
+        </button>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC FOR PDF DOWNLOAD -->
+    <script>
+        function downloadPDF() {
+            // Check if group name is filled
+            const kelompokName = document.getElementById('input-kelompok').value.trim();
+            const fileName = kelompokName ? `LKPD_Pemuaian_${kelompokName.replace(/\s+/g, '_')}.pdf` : 'LKPD_Pemuaian_IPA_Kelas7.pdf';
+
+            // Options for html2pdf
+            const element = document.getElementById('lkpd-content');
+            
+            // Temporary styling tweaks for clean PDF output
+            const opt = {
+                margin:       [0.3, 0.3, 0.3, 0.3],
+                filename:     fileName,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Show alert feedback before generate
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Memproses PDF...';
+            btn.disabled = true;
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }).catch(err => {
+                console.error(err);
+                alert('Terjadi kesalahan saat mengunduh PDF. Silakan coba lagi atau gunakan fungsi Print (Ctrl+P).');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
